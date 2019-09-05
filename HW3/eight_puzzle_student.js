@@ -37,8 +37,22 @@ ID | Action
 //Returns: true if is goal state, false otherwise
 function is_goal_state(state) {
   ++helper_eval_state_count; //Keep track of how many states are evaluated (DO NOT REMOVE!)
+
+  goal_state = [
+    [1, 2, 3],
+    [8, 0, 4],
+    [7, 6, 5]
+  ];
+
+  for (var i = 0; i < goal_state.length; i++) {
+    for (var j = 0; j < goal_state[i].length; i++) {
+      if (state[i][j] != goal_state[i][j]) {
+        return false;
+      }
+    }
+  }
   
-  return /***Your code to check for goal state here!***/;
+  return true;
 }
 
 //Find the list of actions that can be performed from the given state and the new
