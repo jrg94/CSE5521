@@ -38,15 +38,15 @@ ID | Action
 function is_goal_state(state) {
   ++helper_eval_state_count; //Keep track of how many states are evaluated (DO NOT REMOVE!)
 
-  goal_state = [
+  const goal_state = [
     [1, 2, 3],
     [8, 0, 4],
     [7, 6, 5]
   ];
 
   for (var i = 0; i < goal_state.length; i++) {
-    for (var j = 0; j < goal_state[i].length; i++) {
-      if (state[i][j] != goal_state[i][j]) {
+    for (var j = 0; j < goal_state[i].length; j++) {
+      if (state.grid[i][j] != goal_state[i][j]) {
         return false;
       }
     }
@@ -63,7 +63,7 @@ function is_goal_state(state) {
  */
 function find_blank(state) {
   for (var i = 0; i < state.length; i++) {
-    for (var j = 0; j < state.length; j++) {
+    for (var j = 0; j < state[0].length; j++) {
       if (state[i][j] == 0) {
         return [i, j];
       }
