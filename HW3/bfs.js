@@ -10,18 +10,31 @@ function breadth_first_search(initial_state) {
                  //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array
   let closed = new Set(); //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set
 
-  /***Your code for breadth-first search here***/
-  open.push(initial_state);
-  while (open.length != 0 && is_goal_state(open[0])) {
-    let state = open.pop();
-    closed.add(state_to_uniqueid(state));
+  // Initial state is just the grid
+  open.unshift(wrap_state(initial_state, null, null));
 
-    let successors = find_successors(state);
-    for (successor in successors) {
-      if (!closed.has(state_to_uniqueid(successor))) {
-        open.push(successor);
+  while (open.length != 0 && !is_goal_state(open[0].state)) {
+    let state = open.shift();
+    closed.add(state_to_uniqueid(state.state));
+
+    let successors = find_successors(state.state);
+    for (var i = 0; i < successors.length; i++) {
+      let successor = successors[i];
+      if (!closed.has(state_to_uniqueid(successor.resultState))) {
+        open.unshift(wrap_state(successor.resultState, state, successor.actionID));
       }
     }
+  }
+
+  let path = {
+    actions: [],
+    states: []
+  };
+  let node = open[0];
+  while (node.predecessor != null) {
+    path.states.unshift(node.state);
+    path.actions.unshift(node.action);
+    node = node.predecessor;
   }
 
   /*
@@ -57,5 +70,19 @@ function breadth_first_search(initial_state) {
   //OR
 
   //No solution found
-  return null;
+  return path;
+}
+
+/**
+ * 
+ * @param {Array} state 
+ * @param {} predecessor 
+ * @param {*} action 
+ */
+function wrap_state(state, predecessor, action) {
+  return {
+    state: state,
+    predecessor: predecessor,
+    action: action
+  }
 }
