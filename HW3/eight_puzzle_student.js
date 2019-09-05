@@ -55,6 +55,22 @@ function is_goal_state(state) {
   return true;
 }
 
+/**
+ * Computes the location of the blank.
+ * 
+ * @param {Array} state 
+ * @returns {Array} location of blank in row by column
+ */
+function find_blank(state) {
+  for (var i = 0; i < state.length; i++) {
+    for (var j = 0; j < state.length; j++) {
+      if (state[i][j] == 0) {
+        return [i, j];
+      }
+    }
+  }
+}
+
 //Find the list of actions that can be performed from the given state and the new
 //states that result from each of those actions
 //Returns: Array of successor objects (where each object has a valid actionID member and corresponding resultState member)
@@ -62,21 +78,35 @@ function find_successors(state) {
   ++helper_expand_state_count; //Keep track of how many states are expanded (DO NOT REMOVE!)
   
   let successors=[];
+  const actions = {
+    1: [-1, 0],
+    2: [1, 0],
+    3: [0, 1],
+    4: [0, -1]
+  }
 
-  /***Your code to generate successors here!***/
+  const blankPosition = find_blank(state);
 
-  //Hint: Javascript objects are passed by reference, so don't modify "state" directy.
-  //Make copies instead:
-  //  let newState={
-  //    grid : state.grid.map(x => x.slice(0)) //Deep copy of grid
-  //  };
-  //Remember to make a new copy for each new state you make!
+  for (var i = 1; i < 5; i++) {
+    let newState = {
+      grid : state.grid.map(x => x.slice(0)) //Deep copy of grid
+    };
 
-  //Hint: Add new elements to the successor list like so:
-  //  successors.push({
-  //    actionID : /*ID*/,
-  //    resultState : newState
-  //  });
+    newBlankPosition = [
+      blankPosition[0] + actions[i][0],
+      blankPosition[1] + actions[i][1]
+    ]
+
+    valAtNewPosition = newState[newBlankPosition[0]][newBlankPosition[1]]
+    newState[newBlankPosition[0]][newBlankPosition[1]] = 0;
+    newState[blankPosition[0]][blankPosition[1]] = valAtNewPosition;
+    
+    successors.push({
+      actionID : i,
+      resultState : newState
+    });
+  }
+  
 
   return successors;
 }
