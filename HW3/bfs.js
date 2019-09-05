@@ -10,9 +10,8 @@ function breadth_first_search(initial_state) {
                  //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array
   let closed = new Set(); //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set
 
-  // Initial state is just the grid
+  // Perform breadth-first search
   open.unshift(wrap_state(initial_state, null, null));
-
   while (open.length != 0 && !is_goal_state(open[0].state)) {
     let state = open.shift();
     closed.add(state_to_uniqueid(state.state));
@@ -26,6 +25,7 @@ function breadth_first_search(initial_state) {
     }
   }
 
+  // Generate path using predecessors
   let path = {
     actions: [],
     states: []
@@ -37,40 +37,8 @@ function breadth_first_search(initial_state) {
     node = node.predecessor;
   }
 
-  /*
-    Hint: In order to generate the solution path, you will need to augment
-      the states to store the predecessor/parent state they were generated from
-      and the action that generates the child state from the predecessor state.
-      
-	  For example, make a wrapper object that stores the state, predecessor and action.
-	  Javascript objects are easy to make:
-		let object={
-			member_name1 : value1,
-			member_name2 : value2
-		};
-      
-    Hint: Because of the way Javascript Set objects handle Javascript objects, you
-      will need to insert (and check for) a representative value instead of the state
-      object itself. The state_to_uniqueid function has been provided to help you with
-      this. For example
-        let state=...;
-        closed.add(state_to_uniqueid(state)); //Add state to closed set
-        if(closed.has(state_to_uniqueid(state))) { ... } //Check if state is in closed set
-  */
-  
-  /***Your code to generate solution path here***/
-  
-  /*
-  return {
-    actions : ,
-    states : 
-  };
-  */
-  
-  //OR
-
-  //No solution found
-  return path;
+  // If we've exhausted the open list, we've failed.
+  return open.length == 0 ? null: path;
 }
 
 /**
