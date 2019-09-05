@@ -98,15 +98,18 @@ function find_successors(state) {
   const blankPosition = find_blank(state);
 
   for (var i = 1; i < 5; i++) {
+    // clone state
     let newState = {
-      grid : state.grid.map(x => x.slice(0)) //Deep copy of grid
+      grid : state.grid.map(x => x.slice(0)) 
     };
 
+    // Generate new blank position using available actions
     newBlankPosition = [
       blankPosition[0] + actions[i][0],
       blankPosition[1] + actions[i][1]
     ]
 
+    // If new move is valid, generate new state and add it to successors
     if (is_valid_position(newBlankPosition)) {
       valAtNewPosition = newState.grid[newBlankPosition[0]][newBlankPosition[1]]
       newState.grid[newBlankPosition[0]][newBlankPosition[1]] = 0;
