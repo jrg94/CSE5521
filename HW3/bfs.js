@@ -11,6 +11,18 @@ function breadth_first_search(initial_state) {
   let closed = new Set(); //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set
 
   /***Your code for breadth-first search here***/
+  open.push(initial_state);
+  while (open.length != 0 && is_goal_state(open[0])) {
+    let state = open.pop();
+    closed.add(state_to_uniqueid(state));
+
+    let successors = find_successors(state);
+    for (successor in successors) {
+      if (!closed.has(state_to_uniqueid(successor))) {
+        open.push(successor);
+      }
+    }
+  }
 
   /*
     Hint: In order to generate the solution path, you will need to augment
@@ -35,10 +47,12 @@ function breadth_first_search(initial_state) {
   
   /***Your code to generate solution path here***/
   
+  /*
   return {
-    actions : /*array of action ids*/,
-    states : /*array of states*/
+    actions : ,
+    states : 
   };
+  */
   
   //OR
 
