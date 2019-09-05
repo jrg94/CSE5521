@@ -78,7 +78,7 @@ function find_blank(state) {
  * @returns {boolean} true if position is valid
  */
 function is_valid_position(position) {
-  return position[0] >= 0 && position[0] <= 2 && position[1] >= 0 && position[0] <=2;
+  return position[0] >= 0 && position[0] <= 2 && position[1] >= 0 && position[1] <=2;
 }
 
 //Find the list of actions that can be performed from the given state and the new
