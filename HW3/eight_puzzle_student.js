@@ -62,13 +62,23 @@ function is_goal_state(state) {
  * @returns {Array} location of blank in row by column
  */
 function find_blank(state) {
-  for (var i = 0; i < state.length; i++) {
-    for (var j = 0; j < state[0].length; j++) {
-      if (state[i][j] == 0) {
+  for (var i = 0; i < state.grid.length; i++) {
+    for (var j = 0; j < state.grid[0].length; j++) {
+      if (state.grid[i][j] == 0) {
         return [i, j];
       }
     }
   }
+}
+
+/**
+ * Determines if a position is valid.
+ * 
+ * @param {Array} position a pair of values i, j
+ * @returns {boolean} true if position is valid
+ */
+function is_valid_position(position) {
+  return position[0] >= 0 && position[0] <= 2 && position[1] >= 0 && position[0] <=2;
 }
 
 //Find the list of actions that can be performed from the given state and the new
@@ -81,8 +91,8 @@ function find_successors(state) {
   const actions = {
     1: [-1, 0],
     2: [1, 0],
-    3: [0, 1],
-    4: [0, -1]
+    3: [0, -1],
+    4: [0, 1]
   }
 
   const blankPosition = find_blank(state);
@@ -97,14 +107,16 @@ function find_successors(state) {
       blankPosition[1] + actions[i][1]
     ]
 
-    valAtNewPosition = newState[newBlankPosition[0]][newBlankPosition[1]]
-    newState[newBlankPosition[0]][newBlankPosition[1]] = 0;
-    newState[blankPosition[0]][blankPosition[1]] = valAtNewPosition;
-    
-    successors.push({
-      actionID : i,
-      resultState : newState
-    });
+    if (is_valid_position(newBlankPosition)) {
+      valAtNewPosition = newState.grid[newBlankPosition[0]][newBlankPosition[1]]
+      newState.grid[newBlankPosition[0]][newBlankPosition[1]] = 0;
+      newState.grid[blankPosition[0]][blankPosition[1]] = valAtNewPosition;
+      
+      successors.push({
+        actionID : i,
+        resultState : newState
+      });
+    }
   }
   
 
