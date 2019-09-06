@@ -11,7 +11,7 @@ function breadth_first_search(initial_state) {
   let closed = new Set(); //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set
 
   // Perform breadth-first search
-  open.unshift(wrap_bfs_state(initial_state, null, null));
+  open.push(wrap_bfs_state(initial_state, null, null));
   while (open.length != 0 && !is_goal_state(open[0].state)) {
     let state = open.shift();
     closed.add(state_to_uniqueid(state.state));
@@ -20,7 +20,7 @@ function breadth_first_search(initial_state) {
     for (var i = 0; i < successors.length; i++) {
       let successor = successors[i];
       if (!closed.has(state_to_uniqueid(successor.resultState))) {
-        open.unshift(wrap_bfs_state(successor.resultState, state, successor.actionID));
+        open.push(wrap_bfs_state(successor.resultState, state, successor.actionID));
       }
     }
   }
@@ -50,9 +50,9 @@ function compute_path(node) {
 /**
  * Wraps the state to include predecessor and action
  * 
- * @param {Array} state 
- * @param {Object} predecessor 
- * @param {number} action 
+ * @param {Array} state the current state
+ * @param {Object} predecessor the previous state
+ * @param {number} action the current action
  */
 function wrap_bfs_state(state, predecessor, action) {
   return {
