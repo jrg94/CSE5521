@@ -9,9 +9,8 @@ function astar_search(initial_state) {
   let open = new FastPriorityQueue(function(a,b) { return a.estimated_total_cost < b.estimated_total_cost; });
   let closed = new Set();
   let fixed_step_cost = 1; //Assume action cost is constant
-
-  /***Your code for A* search here***/
   
+  // Perform a-star
   open.add(wrap_astar_state(initial_state, null, null, 0, 0));
   while (!open.isEmpty() && !is_goal_state(open.peek().state)) {
     let state = open.poll();
@@ -41,11 +40,11 @@ function astar_search(initial_state) {
 /**
  * Wraps the state to include predecessor and action
  * 
- * @param {Array} state 
- * @param {Object} predecessor 
- * @param {number} action 
- * @param {number} path_cost
- * @param {number} estimated_total_cost
+ * @param {Array} state the current state
+ * @param {Object} predecessor the previous state
+ * @param {number} action the current action
+ * @param {number} path_cost the current path cost
+ * @param {number} estimated_total_cost the estimated total path cost
  */
 function wrap_astar_state(state, predecessor, action, path_cost, estimated_total_cost) {
   return {
