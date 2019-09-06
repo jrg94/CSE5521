@@ -12,6 +12,31 @@ function astar_search(initial_state) {
 
   /***Your code for A* search here***/
   
+  open.add(wrap_astar_state(initial_state, null, null, 0, 0));
+  while (!open.isEmpty() && !is_goal_state(open.peek().state)) {
+    let state = open.poll();
+    closed.add(state_to_uniqueid(state.state));
+
+    let successors = find_successors(state.state);
+    for (var i = 0; i < successors.length; i++) {
+      let successor = successors[i];
+      if (!closed.has(state_to_uniqueid(successor.resultState))) {
+        open.add(
+          wrap_astar_state(
+            successor.resultState, 
+            state, 
+            successor.actionID, 
+            state.path_cost + fixed_step_cost, 
+            state.estimated_total_cost + calculate_heuristic(successor.resultState)
+          )
+        );
+      }
+    }
+  }
+
+  // If we've exhausted the open list, we've failed.
+  return open.isEmpty() ? null: compute_path(open.peek());
+
   /*
     Hint: A* is very similar to BFS, you should only need to make a few small modifications to your BFS code.
 	
@@ -25,4 +50,23 @@ function astar_search(initial_state) {
 
   //No solution found
   return null;
+}
+
+/**
+ * Wraps the state to include predecessor and action
+ * 
+ * @param {Array} state 
+ * @param {Object} predecessor 
+ * @param {number} action 
+ * @param {number} path_cost
+ * @param {number} estimated_total_cost
+ */
+function wrap_astar_state(state, predecessor, action, path_cost, estimated_total_cost) {
+  return {
+    state: state,
+    predecessor: predecessor,
+    action: action,
+    path_cost: path_cost,
+    estimated_total_cost: estimated_total_cost
+  }
 }
