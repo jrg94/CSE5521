@@ -26,7 +26,7 @@ function astar_search(initial_state) {
             state, 
             successor.actionID, 
             state.path_cost + fixed_step_cost, 
-            state.estimated_total_cost + calculate_heuristic(successor.resultState)
+            state.path_cost + calculate_heuristic(successor.resultState)
           )
         );
       }
