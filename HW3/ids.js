@@ -6,10 +6,13 @@
 //  states: Sequence(Array) of states that are moved through, ending with the reached goal state (and EXCLUDING the initial state)
 //  The actions and states arrays should both have the same length.
 function iterative_deepening_search(initial_state) {
-
-  /***Your code for iterative deepening search here!***/
   
-  /*
-    Hint: Re-use/call your depth-limited search function here to avoid extra work.
-  */
+  let i = 1;
+  let path = depth_limited_search(initial_state, i);
+  while (path == null) {
+    i++;
+    path = depth_limited_search(initial_state, i);
+  }
+  
+  return path;
 }

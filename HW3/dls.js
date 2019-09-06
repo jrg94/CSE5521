@@ -7,9 +7,9 @@
 //  states: Sequence(Array) of states that are moved through, ending with the reached goal state (and EXCLUDING the initial state)
 //  The actions and states arrays should both have the same length.
 function depth_limited_search(initial_state,depth_limit) {
-    
   var stack = [];
   var closed = new Set();
+  
   stack.push(wrap_dfs_state(initial_state, null, null, 1));  
   while (stack.length != 0 && !is_goal_state(stack[stack.length-1].state)) {
     let state = stack.pop();
@@ -26,9 +26,6 @@ function depth_limited_search(initial_state,depth_limit) {
       }
     }
   }
-
-  console.log(closed);
-  console.log(stack);
 
   return stack.length == 0 ? null: compute_path(stack[stack.length-1]);
 }
