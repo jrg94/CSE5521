@@ -7,20 +7,45 @@
 //  states: Sequence(Array) of states that are moved through, ending with the reached goal state (and EXCLUDING the initial state)
 //  The actions and states arrays should both have the same length.
 function depth_limited_search(initial_state,depth_limit) {
-
-  /***Your code for depth-limited search here!***/
-  
-  /***DO NOT do repeated state or loop checking!***/
-  
-  /*
-    Hint: You may implement DLS either iteratively (with open set) or recursively.
     
-    In the iterative case, you will need to do similar to breadth-first search and augment
-    the state. In addition to predecessor and action, you will also need to store depth.
-    (You should be able to re-use your BFS code and only make a small amount of changes to
-     accomplish this. Be sure to remove repeat checking!)
+  var stack = [];
+  var closed = new Set();
+  stack.push(wrap_dfs_state(initial_state, null, null, 1));  
+  while (stack.length != 0 && !is_goal_state(stack[stack.length-1].state)) {
+    let state = stack.pop();
+    closed.add(state_to_uniqueid(state.state));
 
-    In the recursive case, you don't need the above. Building the solution path is a little
-    trickier, but I suggest you look into the Array.unshift() function.
-  */
+    if (state.depth <= depth_limit) {
+      let successors = find_successors(state.state);
+      for (var i = 0; i < successors.length; i++) {
+        let successor = successors[i];
+
+        if (!closed.has(state_to_uniqueid(successor.resultState))) {
+          stack.push(wrap_dfs_state(successor.resultState, state, successor.actionID, state.depth + 1))
+        }
+      }
+    }
+  }
+
+  console.log(closed);
+  console.log(stack);
+
+  return stack.length == 0 ? null: compute_path(stack[stack.length-1]);
+}
+
+/**
+ * Wraps the state to include predecessor and action
+ * 
+ * @param {Array} state the state as a 3x3 grid
+ * @param {Object} predecessor the return value of this function for a previous state
+ * @param {number} action the action to achieve this state
+ * @param {number} depth the current stack depth
+ */
+function wrap_dfs_state(state, predecessor, action, depth) {
+  return {
+    state: state,
+    predecessor: predecessor,
+    action: action,
+    depth: depth
+  }
 }
