@@ -8,21 +8,16 @@
 //  The actions and states arrays should both have the same length.
 function depth_limited_search(initial_state,depth_limit) {
   var stack = [];
-  var closed = new Set();
   
   stack.push(wrap_dfs_state(initial_state, null, null, 1));  
   while (stack.length != 0 && !is_goal_state(stack[stack.length-1].state)) {
     let state = stack.pop();
-    closed.add(state_to_uniqueid(state.state));
 
     if (state.depth < depth_limit) {
       let successors = find_successors(state.state);
       for (var i = 0; i < successors.length; i++) {
         let successor = successors[i];
-
-        if (!closed.has(state_to_uniqueid(successor.resultState))) {
-          stack.push(wrap_dfs_state(successor.resultState, state, successor.actionID, state.depth + 1))
-        }
+        stack.push(wrap_dfs_state(successor.resultState, state, successor.actionID, state.depth + 1))
       }
     }
   }
