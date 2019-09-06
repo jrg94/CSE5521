@@ -36,20 +36,6 @@ function astar_search(initial_state) {
 
   // If we've exhausted the open list, we've failed.
   return open.isEmpty() ? null: compute_path(open.peek());
-
-  /*
-    Hint: A* is very similar to BFS, you should only need to make a few small modifications to your BFS code.
-	
-    You will need to add values to your augmented state for path cost and estimated total cost.
-    I suggest you use the member name "estimated_total_cost" so that the above priority queue code will work.
-    
-    Call function calculate_heuristic(state) (provided for you) to calculate the heuristic value for you.
-	
-    See (included) FastPriorityQueue.js for priority queue usage example.
-  */
-
-  //No solution found
-  return null;
 }
 
 /**
