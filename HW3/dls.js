@@ -15,7 +15,7 @@ function depth_limited_search(initial_state,depth_limit) {
     let state = stack.pop();
     closed.add(state_to_uniqueid(state.state));
 
-    if (state.depth <= depth_limit) {
+    if (state.depth < depth_limit) {
       let successors = find_successors(state.state);
       for (var i = 0; i < successors.length; i++) {
         let successor = successors[i];
