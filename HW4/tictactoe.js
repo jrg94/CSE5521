@@ -77,7 +77,36 @@ function is_terminal(board) {
   * Return true if the game is finished (i.e, a draw or someone has won)
   * Return false if the game is incomplete
   *************************/
-  return false;
+  var isTerminal = true;
+
+  const mapping = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5 ,8],
+    [0, 4, 8],
+    [2, 4, 6]
+  ]
+
+  // Checks all states
+  for (var i = 0; i < mapping.length; i++) {
+    var check = [];
+    for (var j = 0; j < mapping[i].length; i++) {
+      check.append(board[mapping[i][j]]);
+    }
+    isTerminal = check.every( (val, i, arr) => val === arr[0] && val != -1 );
+  }
+
+  // Checks if board has any unfilled spaces
+  for (var i = 0; i < board.length; i++) {
+    if (board[i] == -1) {
+      isTerminal = false;
+    }
+  }
+
+  return isTerminal;
 }
 
 function utility(board,player) {
