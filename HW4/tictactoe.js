@@ -73,13 +73,15 @@ function tictactoe_minimax(board, cpu_player, cur_player) {
     *
     * Hint: Should you find yourself in need of a very large number, try Infinity or -Infinity
     ***********************/
-    if (cur_player === cpu_player && results.score > min_max_score) {
-      min_max_score = results.score;
-      min_max_move = results.move;
+    if (cur_player === cpu_player) {
+      if (results.score > min_max_score) {
+        min_max_score = results.score;
+        min_max_move = move;
+      }
     } else {
       if (results.score < min_max_score) {
         min_max_score = results.score;
-        min_max_move = results.move;
+        min_max_move = move;
       }
     }
     
@@ -93,18 +95,16 @@ function tictactoe_minimax(board, cpu_player, cur_player) {
   };
 }
 
+/**
+ * Tests if the game is complete.
+ * 
+ * @param {Array} board 
+ */
 function is_terminal(board) {
   ++helper_eval_state_count; //DO NOT REMOVE
 
-  /*************************
-  * TASK: Implement the terminal test
-  * Return true if the game is finished (i.e, a draw or someone has won)
-  * Return false if the game is incomplete
-  *************************/
-
   let winner = get_win_value(board);
   let isFull = is_full(board);
-
   return winner >= 0 || isFull;
 }
 
@@ -121,7 +121,6 @@ function is_full(board) {
       count++;
     }
   }
-
   return count == board.length;
 }
 
