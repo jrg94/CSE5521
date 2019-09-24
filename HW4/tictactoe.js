@@ -49,6 +49,9 @@ function tictactoe_minimax(board, cpu_player, cur_player) {
       score: utility(board, cpu_player) //How good was this result for us?
     }
 
+  let min_max_score = cur_player === cpu_player ? -Infinity : Infinity; 
+  let min_max_move = -1;
+
   ++helper_expand_state_count; //DO NOT REMOVE
   //GENERATE SUCCESSORS
   for (let move of move_expand_order) { //For each possible move (i.e., action)
@@ -70,13 +73,23 @@ function tictactoe_minimax(board, cpu_player, cur_player) {
     *
     * Hint: Should you find yourself in need of a very large number, try Infinity or -Infinity
     ***********************/
+    if (cur_player === cpu_player && results.score > min_max_score) {
+      min_max_score = results.score;
+      min_max_move = results.move;
+    } else {
+      if (results.score < min_max_score) {
+        min_max_score = results.score;
+        min_max_move = results.move;
+      }
+    }
+    
   }
 
   //Return results gathered from all sucessors (moves).
   //Which was the "best" move?  
   return {
-    move: /* What do you return here? */,
-    score: /* And here? */
+    move: min_max_move,
+    score: min_max_score
   };
 }
 
@@ -117,10 +130,10 @@ function get_win_value(board) {
   for (var i = 0; i < mapping.length; i++) {
     var check = [];
     for (var j = 0; j < mapping[i].length; j++) {
-      check.append(board[mapping[i][j]]);
+      check.push(board[mapping[i][j]]);
     }
     if (check.every((val, i, arr) => val === arr[0] && val != -1)) {
-      return arr[0];
+      return check[0];
     }
   }
   return -1;
