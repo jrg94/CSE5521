@@ -1,11 +1,22 @@
 //Define the order in which to examine/expand possible moves
 //(This affects alpha-beta pruning performance)
-let move_expand_order=[0,1,2,3,4,5,6,7,8]; //Naive (linear) ordering
+let move_expand_order = [0, 1, 2, 3, 4, 5, 6, 7, 8]; //Naive (linear) ordering
 //let move_expand_order=[4,0,1,2,3,5,6,7,8]; //Better ordering?
+
+const mapping = [
+  [0, 1, 2],
+  [3, 4, 5],
+  [6, 7, 8],
+  [0, 3, 6],
+  [1, 4, 7],
+  [2, 5, 8],
+  [0, 4, 8],
+  [2, 4, 6]
+]
 
 /////////////////////////////////////////////////////////////////////////////
 
-function tictactoe_minimax(board,cpu_player,cur_player) {
+function tictactoe_minimax(board, cpu_player, cur_player) {
   /***********************************************************
   * board: game state, an array representing a tic-tac-toe board
   * The positions correspond as follows
@@ -32,24 +43,24 @@ function tictactoe_minimax(board,cpu_player,cur_player) {
   ***********************************************************/
 
   //BASE CASE
-  if(is_terminal(board)) //Stop if game is over
+  if (is_terminal(board)) //Stop if game is over
     return {
-      move:null,
-      score:utility(board,cpu_player) //How good was this result for us?
+      move: null,
+      score: utility(board, cpu_player) //How good was this result for us?
     }
 
   ++helper_expand_state_count; //DO NOT REMOVE
   //GENERATE SUCCESSORS
-  for(let move of move_expand_order) { //For each possible move (i.e., action)
-    if(board[move]!=-1) continue; //Already taken, can't move here (i.e., successor not valid)
-    
-    let new_board=board.slice(0); //Copy
-    new_board[move]=cur_player; //Apply move
+  for (let move of move_expand_order) { //For each possible move (i.e., action)
+    if (board[move] != -1) continue; //Already taken, can't move here (i.e., successor not valid)
+
+    let new_board = board.slice(0); //Copy
+    new_board[move] = cur_player; //Apply move
     //Successor state: new_board
 
     //RECURSION
     // What will my opponent do if I make this move?
-    let results=tictactoe_minimax(new_board,cpu_player,1-cur_player);
+    let results = tictactoe_minimax(new_board, cpu_player, 1 - cur_player);
 
     //MINIMAX
     /***********************
@@ -71,30 +82,20 @@ function tictactoe_minimax(board,cpu_player,cur_player) {
 
 function is_terminal(board) {
   ++helper_eval_state_count; //DO NOT REMOVE
-  
+
   /*************************
   * TASK: Implement the terminal test
   * Return true if the game is finished (i.e, a draw or someone has won)
   * Return false if the game is incomplete
   *************************/
-  const mapping = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5 ,8],
-    [0, 4, 8],
-    [2, 4, 6]
-  ]
 
   // Checks all states
   for (var i = 0; i < mapping.length; i++) {
     var check = [];
-    for (var j = 0; j < mapping[i].length; i++) {
+    for (var j = 0; j < mapping[i].length; j++) {
       check.append(board[mapping[i][j]]);
     }
-    if (check.every( (val, i, arr) => val === arr[0] && val != -1 )) {
+    if (check.every((val, i, arr) => val === arr[0] && val != -1)) {
       return true;
     }
   }
@@ -110,7 +111,7 @@ function is_terminal(board) {
   return isTerminal;
 }
 
-function utility(board,player) {
+function utility(board, player) {
   /***********************
   * TASK: Implement the utility function
   *
@@ -130,9 +131,31 @@ function utility(board,player) {
   * Hint: You can find the number of turns by counting the number of non-blank spaces
   *       (Or the number of turns remaining by counting blank spaces.)
   ***********************/
+
+  // Count the number of turns
+  var turns = 0;
+  for (var i = 0; i < board.length; i++) {
+    if (board[i] >= 0) {
+      turns += 1;
+    }
+  }
+
+  // Determine if we have a winner
+  var isWin = false;
+  for (var i = 0; i < mapping.length; i++) {
+    var check = [];
+    for (var j = 0; j < mapping[i].length; j++) {
+      check.append(board[mapping[i][j]]);
+    }
+    if (check.every((val) => val === player)) {
+      isWin = true;
+    }
+  }
+
+  var score = 0;
 }
 
-function tictactoe_minimax_alphabeta(board,cpu_player,cur_player,alpha,beta) {
+function tictactoe_minimax_alphabeta(board, cpu_player, cur_player, alpha, beta) {
   /***********************
   * TASK: Implement Alpha-Beta Pruning
   *
@@ -143,7 +166,7 @@ function tictactoe_minimax_alphabeta(board,cpu_player,cur_player,alpha,beta) {
   ***********************/
 }
 
-function debug(board,human_player) {
+function debug(board, human_player) {
   /***********************
   * This function is run whenever you click the "Run debug function" button.
   *
@@ -154,10 +177,10 @@ function debug(board,human_player) {
   ***********************/
   helper_log_write("Testing board:");
   helper_log_board(board);
-  
-  let tm=is_terminal(board);
-  helper_log_write("is_terminal() returns "+(tm?"true":"false"));
 
-  let u=utility(board,human_player);
-  helper_log_write("utility() returns "+u+" (w.r.t. human player selection)");
+  let tm = is_terminal(board);
+  helper_log_write("is_terminal() returns " + (tm ? "true" : "false"));
+
+  let u = utility(board, human_player);
+  helper_log_write("utility() returns " + u + " (w.r.t. human player selection)");
 }
