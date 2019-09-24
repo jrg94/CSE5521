@@ -148,26 +148,24 @@ function utility(board, player) {
   ***********************/
 
   // Count the number of turns
-  var turns = 0;
+  var turnsLeft = 0;
   for (var i = 0; i < board.length; i++) {
-    if (board[i] >= 0) {
-      turns += 1;
+    if (board[i] == -1) {
+      turnsLeft += 1;
     }
   }
 
   // Determine if we have a winner
-  var isWin = false;
-  for (var i = 0; i < mapping.length; i++) {
-    var check = [];
-    for (var j = 0; j < mapping[i].length; j++) {
-      check.append(board[mapping[i][j]]);
-    }
-    if (check.every((val) => val === player)) {
-      isWin = true;
+  var score = 0;
+  let winner = get_win_value(board);
+  if (winner >= 0) {
+    score = turnsLeft + 1;
+    if (winner != player) {
+      score *= -1;
     }
   }
 
-  var score = 0;
+  return score;
 }
 
 function tictactoe_minimax_alphabeta(board, cpu_player, cur_player, alpha, beta) {
