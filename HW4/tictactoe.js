@@ -89,22 +89,16 @@ function is_terminal(board) {
   * Return false if the game is incomplete
   *************************/
 
-  // Checks all states
-  for (var i = 0; i < mapping.length; i++) {
-    var check = [];
-    for (var j = 0; j < mapping[i].length; j++) {
-      check.append(board[mapping[i][j]]);
-    }
-    if (check.every((val, i, arr) => val === arr[0] && val != -1)) {
-      return true;
-    }
-  }
+  let winner = get_win_value(board);
 
-  // Checks if board has any unfilled spaces
-  var isTerminal = true;
-  for (var i = 0; i < board.length; i++) {
-    if (board[i] == -1) {
-      isTerminal = false;
+  let isTerminal = true;
+  if (winner >= 0) {
+    isTerminal = true;
+  } else {
+    for (var i = 0; i < board.length; i++) {
+      if (board[i] == -1) {
+        isTerminal = false;
+      }
     }
   }
 
@@ -115,7 +109,7 @@ function is_terminal(board) {
  * Returns which player won:
  * 0 for X
  * 1 for O
- * -1 if draw
+ * -1 if neither (not necessarily a draw)
  * 
  * @param {Array} board the game board as a list
  */
