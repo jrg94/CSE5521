@@ -73,11 +73,11 @@ function tictactoe_minimax(board, cpu_player, cur_player) {
     *
     * Hint: Should you find yourself in need of a very large number, try Infinity or -Infinity
     ***********************/
-    if (cur_player === cpu_player && results.score > min_max_score) {
+    if (cur_player === cpu_player && results.score < min_max_score) {
       min_max_score = results.score;
       min_max_move = results.move;
     } else {
-      if (results.score < min_max_score) {
+      if (results.score > min_max_score) {
         min_max_score = results.score;
         min_max_move = results.move;
       }
@@ -105,8 +105,8 @@ function is_terminal(board) {
   let winner = get_win_value(board);
 
   let isTerminal = true;
-  if (winner >= 0) {
-    isTerminal = true;
+  if (winner < 0) {
+    isTerminal = false;
   } else {
     for (var i = 0; i < board.length; i++) {
       if (board[i] == -1) {
