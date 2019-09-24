@@ -213,7 +213,7 @@ function tictactoe_minimax_alphabeta(board, cpu_player, cur_player, alpha, beta)
 
     //RECURSION
     // What will my opponent do if I make this move?
-    let results = tictactoe_minimax_alphabeta(new_board, cpu_player, 1 - cur_player);
+    let results = tictactoe_minimax_alphabeta(new_board, cpu_player, 1 - cur_player, alpha, beta);
 
     //MINIMAX
     if (cur_player === cpu_player) {
