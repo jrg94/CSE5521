@@ -3,6 +3,7 @@
 let move_expand_order = [0, 1, 2, 3, 4, 5, 6, 7, 8]; //Naive (linear) ordering
 //let move_expand_order=[4,0,1,2,3,5,6,7,8]; //Better ordering?
 
+// A mapping of all possible win conditions
 const mapping = [
   [0, 1, 2],
   [3, 4, 5],
@@ -91,7 +92,7 @@ function tictactoe_minimax(board, cpu_player, cur_player) {
 /**
  * Tests if the game is complete.
  * 
- * @param {Array} board 
+ * @param {Array} board that game board
  */
 function is_terminal(board) {
   ++helper_eval_state_count; //DO NOT REMOVE
@@ -105,7 +106,7 @@ function is_terminal(board) {
  * A helper function which detects if the board
  * is filled or not.
  * 
- * @param {Array} board 
+ * @param {Array} board the game board
  */
 function is_full(board) {
   let count = 0;
@@ -157,8 +158,8 @@ function get_win_value(board) {
  * Hint: You can find the number of turns by counting the number of non-blank spaces
  *       (Or the number of turns remaining by counting blank spaces.)
  * 
- * @param {Array} board 
- * @param {Number} player 
+ * @param {Array} board the game board
+ * @param {Number} player the current player
  */
 function utility(board, player) {
   // Count the number of turns
