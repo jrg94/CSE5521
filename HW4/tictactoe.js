@@ -192,6 +192,50 @@ function tictactoe_minimax_alphabeta(board, cpu_player, cur_player, alpha, beta)
   *
   * Hint: Make sure you update the recursive function call to call this function!
   ***********************/
+  //BASE CASE
+  if (is_terminal(board)) //Stop if game is over
+    return {
+      move: null,
+      score: utility(board, cpu_player) //How good was this result for us?
+    }
+
+  let min_max_score = cur_player === cpu_player ? -Infinity : Infinity; 
+  let min_max_move = null;
+
+  ++helper_expand_state_count; //DO NOT REMOVE
+  //GENERATE SUCCESSORS
+  for (let move of move_expand_order) { //For each possible move (i.e., action)
+    if (board[move] != -1) continue; //Already taken, can't move here (i.e., successor not valid)
+
+    let new_board = board.slice(0); //Copy
+    new_board[move] = cur_player; //Apply move
+    //Successor state: new_board
+
+    //RECURSION
+    // What will my opponent do if I make this move?
+    let results = tictactoe_minimax_alphabeta(new_board, cpu_player, 1 - cur_player);
+
+    //MINIMAX
+    if (cur_player === cpu_player) {
+      if (results.score > min_max_score) {
+        min_max_score = results.score;
+        min_max_move = move;
+      }
+    } else {
+      if (results.score < min_max_score) {
+        min_max_score = results.score;
+        min_max_move = move;
+      }
+    }
+    
+  }
+
+  //Return results gathered from all sucessors (moves).
+  //Which was the "best" move?  
+  return {
+    move: min_max_move,
+    score: min_max_score
+  };
 }
 
 function debug(board, human_player) {
