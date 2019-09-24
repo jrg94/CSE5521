@@ -217,15 +217,21 @@ function tictactoe_minimax_alphabeta(board, cpu_player, cur_player, alpha, beta)
 
     //MINIMAX
     if (cur_player === cpu_player) {
-      if (results.score > min_max_score) {
+      if (results.score > alpha) {
         min_max_score = results.score;
+        alpha = results.score;
         min_max_move = move;
       }
     } else {
-      if (results.score < min_max_score) {
+      if (results.score < beta) {
         min_max_score = results.score;
+        beta = results.score;
         min_max_move = move;
       }
+    }
+
+    if (alpha > beta) {
+      break;
     }
     
   }
