@@ -66,13 +66,6 @@ function tictactoe_minimax(board, cpu_player, cur_player) {
     let results = tictactoe_minimax(new_board, cpu_player, 1 - cur_player);
 
     //MINIMAX
-    /***********************
-    * TASK: Implement minimax here. (What do you do with results.move and results.score ?)
-    * 
-    * Hint: You will need a little code outside the loop as well, but the main work goes here.
-    *
-    * Hint: Should you find yourself in need of a very large number, try Infinity or -Infinity
-    ***********************/
     if (cur_player === cpu_player) {
       if (results.score > min_max_score) {
         min_max_score = results.score;
@@ -145,27 +138,29 @@ function get_win_value(board) {
   return -1;
 }
 
+/**
+ * TASK: Implement the utility function
+ *
+ * Return the utility score for a given board, with respect to the indicated player
+ *
+ * Give score of 0 if the board is a draw
+ * Give a positive score for wins, negative for losses.
+ * Give larger scores for winning quickly or losing slowly
+ * For example:
+ *   Give a large, positive score if the player had a fast win (i.e., 5 if it only took 5 moves to win)
+ *   Give a small, positive score if the player had a slow win (i.e., 1 if it took all 9 moves to win)
+ *   Give a small, negative score if the player had a slow loss (i.e., -1 if it took all 9 moves to lose)
+ *   Give a large, negative score if the player had a fast loss (i.e., -5 if it only took 5 moves to lose)
+ * (DO NOT simply hard code the above 4 values, other scores are possible. Calculate the score based on the above pattern.)
+ * (You may return either 0 or null if the game isn't finished, but this function should never be called in that case anyways.)
+ *
+ * Hint: You can find the number of turns by counting the number of non-blank spaces
+ *       (Or the number of turns remaining by counting blank spaces.)
+ * 
+ * @param {Array} board 
+ * @param {Number} player 
+ */
 function utility(board, player) {
-  /***********************
-  * TASK: Implement the utility function
-  *
-  * Return the utility score for a given board, with respect to the indicated player
-  *
-  * Give score of 0 if the board is a draw
-  * Give a positive score for wins, negative for losses.
-  * Give larger scores for winning quickly or losing slowly
-  * For example:
-  *   Give a large, positive score if the player had a fast win (i.e., 5 if it only took 5 moves to win)
-  *   Give a small, positive score if the player had a slow win (i.e., 1 if it took all 9 moves to win)
-  *   Give a small, negative score if the player had a slow loss (i.e., -1 if it took all 9 moves to lose)
-  *   Give a large, negative score if the player had a fast loss (i.e., -5 if it only took 5 moves to lose)
-  * (DO NOT simply hard code the above 4 values, other scores are possible. Calculate the score based on the above pattern.)
-  * (You may return either 0 or null if the game isn't finished, but this function should never be called in that case anyways.)
-  *
-  * Hint: You can find the number of turns by counting the number of non-blank spaces
-  *       (Or the number of turns remaining by counting blank spaces.)
-  ***********************/
-
   // Count the number of turns
   var turnsLeft = 0;
   for (var i = 0; i < board.length; i++) {
