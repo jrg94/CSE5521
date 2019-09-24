@@ -111,6 +111,27 @@ function is_terminal(board) {
   return isTerminal;
 }
 
+/**
+ * Returns which player won:
+ * 0 for X
+ * 1 for O
+ * -1 if draw
+ * 
+ * @param {Array} board the game board as a list
+ */
+function get_win_value(board) {
+  for (var i = 0; i < mapping.length; i++) {
+    var check = [];
+    for (var j = 0; j < mapping[i].length; j++) {
+      check.append(board[mapping[i][j]]);
+    }
+    if (check.every((val, i, arr) => val === arr[0] && val != -1)) {
+      return arr[0];
+    }
+  }
+  return -1;
+}
+
 function utility(board, player) {
   /***********************
   * TASK: Implement the utility function
