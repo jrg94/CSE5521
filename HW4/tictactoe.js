@@ -1,7 +1,9 @@
 //Define the order in which to examine/expand possible moves
 //(This affects alpha-beta pruning performance)
-let move_expand_order = [0, 1, 2, 3, 4, 5, 6, 7, 8]; //Naive (linear) ordering
-//let move_expand_order=[4,0,1,2,3,5,6,7,8]; //Better ordering?
+//let move_expand_order = [0, 1, 2, 3, 4, 5, 6, 7, 8]; //Naive (linear) ordering
+//let move_expand_order = [4, 0, 1, 2, 3, 5, 6, 7, 8]; //Better ordering?
+let move_expand_order = [4, 0, 2, 6, 8, 1, 3, 5, 7]; // Optimal ordering
+//let move_expand_order = [1, 3, 5, 7, 0, 2, 6, 8, 4]; // Worst ordering
 
 // A mapping of all possible win conditions
 const mapping = [
@@ -50,7 +52,7 @@ function tictactoe_minimax(board, cpu_player, cur_player) {
       score: utility(board, cpu_player) //How good was this result for us?
     }
 
-  let min_max_score = cur_player === cpu_player ? -Infinity : Infinity; 
+  let min_max_score = cur_player === cpu_player ? -Infinity : Infinity;
   let min_max_move = null;
 
   ++helper_expand_state_count; //DO NOT REMOVE
@@ -78,7 +80,7 @@ function tictactoe_minimax(board, cpu_player, cur_player) {
         min_max_move = move;
       }
     }
-    
+
   }
 
   //Return results gathered from all sucessors (moves).
@@ -199,7 +201,7 @@ function tictactoe_minimax_alphabeta(board, cpu_player, cur_player, alpha, beta)
       score: utility(board, cpu_player) //How good was this result for us?
     }
 
-  let min_max_score = cur_player === cpu_player ? -Infinity : Infinity; 
+  let min_max_score = cur_player === cpu_player ? -Infinity : Infinity;
   let min_max_move = null;
 
   ++helper_expand_state_count; //DO NOT REMOVE
@@ -233,7 +235,7 @@ function tictactoe_minimax_alphabeta(board, cpu_player, cur_player, alpha, beta)
     if (alpha > beta) {
       break;
     }
-    
+
   }
 
   //Return results gathered from all sucessors (moves).
