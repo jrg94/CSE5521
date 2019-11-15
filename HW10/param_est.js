@@ -21,56 +21,6 @@
 
 //////////////////////////////////////////////////////////////////////////////
 
-/**
- * Transposes a matrix.
- * 
- * @param {Array} m a matrix
- */
-function transposeMatrix(m) {
-  return m[0].map((col, i) => m.map(row => row[i]));
-}
-
-/**
- * Multiplies two matrices together.
- * 
- * @param {Array} a the first matrix
- * @param {Array} b the second matrix
- */
-function multiplyMatrices(a, b) {
-  const numRowsA = a.length
-  const numColsA = a[0].length
-  const numColsB = b[0].length
-
-  m = new Array(numRowsA)
-
-  for (var row = 0; row < numRowsA; row++) {
-    m[row] = new Array(numColsB)
-    for (var col = 0; col < numColsB; col++) {
-      m[row][col] = 0
-      for (var i = 0; i < numColsA; i++) {
-        m[row][col] += a[row][i] * b[i][col]
-      }
-    }
-  }
-
-  return m
-}
-
-/**
- * Inverts a 2x2 matrix.
- * 
- * @param {Array} m a 2x2 matrix
- */
-function invertMatrix(m) {
-  // ad - bc
-  determinant = m[0][0] * m[1][1] - m[1][0] * m[0][1]
-  mInverse = [
-    [m[1][1] / determinant, -m[0][1] / determinant],
-    [-m[1][0] / determinant, m[0][0] / determinant]
-  ]
-  return mInverse
-}
-
 //Perform linear least squares for line equation: y=a*x+b
 //return parameter array p, where p[0]=b and p[1]=a
 function calc_linLSQ_line(data) {
@@ -103,15 +53,15 @@ function calc_linLSQ_line(data) {
   * Refer to slides 18-19
   ***********************/
   // 5x2 -> 2x5
-  let ATranspose = transposeMatrix(A)
+  let ATranspose = numeric.transpose(A)
   // 2x5 * 5x2 -> 2x2
-  let AProduct = multiplyMatrices(ATranspose, A)
+  let AProduct = numeric.dot(ATranspose, A)
   // 2x2 -> 2x2
-  let AProductInverse = invertMatrix(AProduct)
+  let AProductInverse = numeric.inv(AProduct)
   // 2x2 * 2x5 -> 2x5
-  let AProductInverseTranspose = multiplyMatrices(AProductInverse, ATranspose)
+  let AProductInverseTranspose = numeric.dot(AProductInverse, ATranspose)
   // 2x5 * 5x1 -> 2x1
-  let p = multiplyMatrices(AProductInverseTranspose, b);
+  let p = numeric.dot(AProductInverseTranspose, b)
 
   let sse = 0;
   for (let i = 0; i < N; ++i) {
