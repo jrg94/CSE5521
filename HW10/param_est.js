@@ -80,9 +80,6 @@ function calc_linLSQ_line(data) {
   //Note: x and y are both vectors, use them accordingly.
   //(For this homework x is a vector, but generally speaking it may not be!)
 
-  console.log(x)
-  console.log(y)
-
   //Setup matrices/vectors for calculation
   let A = numeric.rep([N, 2], 0); //Make an empty (all zero) Nx2 matrix
   let b = numeric.rep([N], 0); //Make an empty N element vector
@@ -100,9 +97,6 @@ function calc_linLSQ_line(data) {
     b[i] = [y[i]];
   }
 
-  console.table(A)
-  console.table(b)
-
   /***********************
   * TASK: Solve for parameters
   *
@@ -110,23 +104,14 @@ function calc_linLSQ_line(data) {
   ***********************/
   // 5x2 -> 2x5
   let ATranspose = transposeMatrix(A)
-  console.table(ATranspose)
-
   // 2x5 * 5x2 -> 2x2
   let AProduct = multiplyMatrices(ATranspose, A)
-  console.table(AProduct)
-
   // 2x2 -> 2x2
   let AProductInverse = invertMatrix(AProduct)
-  console.table(AProductInverse)
-
   // 2x2 * 2x5 -> 2x5
   let AProductInverseTranspose = multiplyMatrices(AProductInverse, ATranspose)
-  console.table(AProductInverseTranspose)
-
   // 2x5 * 5x1 -> 2x1
   let p = multiplyMatrices(AProductInverseTranspose, b);
-  console.table(p)
 
   let sse = 0;
   for (let i = 0; i < N; ++i) {
