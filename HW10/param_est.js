@@ -21,6 +21,32 @@
 
 //////////////////////////////////////////////////////////////////////////////
 
+/**
+ * Multiplies two matrices together.
+ * 
+ * @param {Array} a the first matrix
+ * @param {Array} b the second matrix
+ */
+function multiplyMatrices(a, b) {
+  const numRowsA = a.length
+  const numColsA = a[0].length
+  const numColsB = b[0].length
+
+  m = new Array(numRowsA)
+
+  for (var row = 0; row < numRowsA; row++) {
+    m[row] = new Array(numColsB)
+    for (var col = 0; col < numColsB; col++) {
+      m[row][col] = 0
+      for (var i = 0; i < numColsA; i++) {
+        m[row][col] += a[row][i] * b[i][col]
+      }
+    }
+  }
+
+  return m
+}
+
 //Perform linear least squares for line equation: y=a*x+b
 //return parameter array p, where p[0]=b and p[1]=a
 function calc_linLSQ_line(data) {
@@ -58,6 +84,12 @@ function calc_linLSQ_line(data) {
   *
   * Refer to slides 18-19
   ***********************/
+  ATranspose = A[0].map((col, i) => A.map(row => row[i]));
+  console.log(ATranspose)
+
+  AProduct = multiplyMatrices(ATranspose, A)
+  console.log(AProduct)
+
   //let p =??;
 
   let sse = 0;
