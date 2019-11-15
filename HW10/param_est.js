@@ -22,6 +22,15 @@
 //////////////////////////////////////////////////////////////////////////////
 
 /**
+ * Transposes a matrix.
+ * 
+ * @param {Array} m a matrix
+ */
+function transposeMatrix(m) {
+  return m[0].map((col, i) => m.map(row => row[i]));
+}
+
+/**
  * Multiplies two matrices together.
  * 
  * @param {Array} a the first matrix
@@ -45,6 +54,21 @@ function multiplyMatrices(a, b) {
   }
 
   return m
+}
+
+/**
+ * Inverts a 2x2 matrix.
+ * 
+ * @param {Array} m a 2x2 matrix
+ */
+function invertMatrix(m) {
+  // ad - bc
+  determinant = m[0][0] * m[1][1] - m[1][0] * m[0][1]
+  mInverse = [
+    [m[1][1] / determinant, -m[0][1] / determinant],
+    [-m[1][0] / determinant, m[0][0] / determinant]
+  ]
+  return mInverse
 }
 
 //Perform linear least squares for line equation: y=a*x+b
@@ -71,26 +95,38 @@ function calc_linLSQ_line(data) {
     * Hint: BE CAREFUL of the order, what do the columns of A refer and relate to?
     ***********************/
 
-    A[i][0] = x[i];
-    A[i][1] = 1;
-    b[i] = y[i];
+    A[i][0] = 1;
+    A[i][1] = x[i];
+    b[i] = [y[i]];
   }
 
-  console.log(A)
-  console.log(b)
+  console.table(A)
+  console.table(b)
 
   /***********************
   * TASK: Solve for parameters
   *
   * Refer to slides 18-19
   ***********************/
-  ATranspose = A[0].map((col, i) => A.map(row => row[i]));
-  console.log(ATranspose)
+  // 5x2 -> 2x5
+  let ATranspose = transposeMatrix(A)
+  console.table(ATranspose)
 
-  AProduct = multiplyMatrices(ATranspose, A)
-  console.log(AProduct)
+  // 2x5 * 5x2 -> 2x2
+  let AProduct = multiplyMatrices(ATranspose, A)
+  console.table(AProduct)
 
-  //let p =??;
+  // 2x2 -> 2x2
+  let AProductInverse = invertMatrix(AProduct)
+  console.table(AProductInverse)
+
+  // 2x2 * 2x5 -> 2x5
+  let AProductInverseTranspose = multiplyMatrices(AProductInverse, ATranspose)
+  console.table(AProductInverseTranspose)
+
+  // 2x5 * 5x1 -> 2x1
+  let p = multiplyMatrices(AProductInverseTranspose, b);
+  console.table(p)
 
   let sse = 0;
   for (let i = 0; i < N; ++i) {
