@@ -24,16 +24,19 @@
 //Perform linear least squares for line equation: y=a*x+b
 //return parameter array p, where p[0]=b and p[1]=a
 function calc_linLSQ_line(data) {
-  let N=numeric.dim(data)[0]; //Number of data points
-  let x=squeeze_to_vector(numeric.getBlock(data,[0, 0],[N-1, 0])); //Extract x (dependent) values
-  let y=squeeze_to_vector(numeric.getBlock(data,[0, 1],[N-1, 1])); //Extract y (target) values
+  let N = numeric.dim(data)[0]; //Number of data points
+  let x = squeeze_to_vector(numeric.getBlock(data, [0, 0], [N - 1, 0])); //Extract x (dependent) values
+  let y = squeeze_to_vector(numeric.getBlock(data, [0, 1], [N - 1, 1])); //Extract y (target) values
   //Note: x and y are both vectors, use them accordingly.
   //(For this homework x is a vector, but generally speaking it may not be!)
 
+  console.log(x)
+  console.log(y)
+
   //Setup matrices/vectors for calculation
-  let A=numeric.rep([N,2],0); //Make an empty (all zero) Nx2 matrix
-  let b=numeric.rep([N],0); //Make an empty N element vector
-  for(let i=0;i<N;++i) {
+  let A = numeric.rep([N, 2], 0); //Make an empty (all zero) Nx2 matrix
+  let b = numeric.rep([N], 0); //Make an empty N element vector
+  for (let i = 0; i < N; ++i) {
     /***********************
     * TASK: Fill in A and b
     *
@@ -42,29 +45,32 @@ function calc_linLSQ_line(data) {
     * Hint: BE CAREFUL of the order, what do the columns of A refer and relate to?
     ***********************/
 
-    A[i][0]=??;
-    A[i][1]=??;
-    b[i]=??;
+    A[i][0] = x[i];
+    A[i][1] = 1;
+    b[i] = y[i];
   }
+
+  console.log(A)
+  console.log(b)
 
   /***********************
   * TASK: Solve for parameters
   *
   * Refer to slides 18-19
   ***********************/
-  let p=??;
-  
-  let sse=0;
-  for(let i=0;i<N;++i) {
-    let model_out=eval_line_func(x[i],p); //The output of the model function on data point i using
-                                          //parameters p
+  //let p =??;
+
+  let sse = 0;
+  for (let i = 0; i < N; ++i) {
+    let model_out = eval_line_func(x[i], p); //The output of the model function on data point i using
+    //parameters p
 
     /***********************
     * TASK: Calculate the sum of squared error
     ***********************/
   }
-  helper_log_write("SSE="+sse);
-    
+  helper_log_write("SSE=" + sse);
+
   return p;
 }
 
@@ -74,14 +80,14 @@ function calc_linLSQ_line(data) {
 //order: order of the polynomial
 //return parameter array p, where p[0] is the constant term and p[order] holds the highest order coefficient
 //(example: for quadratic a*x^2+b*x+c, order=2, p[0]=c, p[1]=b, p[2]=a)
-function calc_linLSQ_poly(data,order) {
-  let N=numeric.dim(data)[0];
-  let x=squeeze_to_vector(numeric.getBlock(data,[0, 0],[N-1, 0])); //Extract x (dependent) values
-  let y=squeeze_to_vector(numeric.getBlock(data,[0, 1],[N-1, 1])); //Extract y (target) values
-  
-  let A=numeric.rep([N,order+1],0);
-  let b=numeric.rep([N],0);
-  for(let i=0;i<N;++i) {
+function calc_linLSQ_poly(data, order) {
+  let N = numeric.dim(data)[0];
+  let x = squeeze_to_vector(numeric.getBlock(data, [0, 0], [N - 1, 0])); //Extract x (dependent) values
+  let y = squeeze_to_vector(numeric.getBlock(data, [0, 1], [N - 1, 1])); //Extract y (target) values
+
+  let A = numeric.rep([N, order + 1], 0);
+  let b = numeric.rep([N], 0);
+  for (let i = 0; i < N; ++i) {
 		/***********************
     * TASK: Fill in A and b
     *
@@ -96,7 +102,7 @@ function calc_linLSQ_poly(data,order) {
     //A[i][order]=??;
     //b[i]=??;
   }
-  
+
   /***********************
   * TASK: Solve for parameters and calculate SSE
   *
@@ -112,12 +118,12 @@ function calc_linLSQ_poly(data,order) {
 //Calculate jacobian matrix for a*x^b+c*x+d
 //p: parameter array where p[0]=d,...,p[3]=a
 //return Jacobian matrix
-function calc_jacobian(data,p) {
-  let N=numeric.dim(data)[0];
-  let x=squeeze_to_vector(numeric.getBlock(data,[0, 0],[N-1, 0])); //Extract x (dependent) values
-  
-  let J=numeric.rep([N,4],0);
-  for(let i=0;i<N;++i) {
+function calc_jacobian(data, p) {
+  let N = numeric.dim(data)[0];
+  let x = squeeze_to_vector(numeric.getBlock(data, [0, 0], [N - 1, 0])); //Extract x (dependent) values
+
+  let J = numeric.rep([N, 4], 0);
+  for (let i = 0; i < N; ++i) {
     /***********************
     * TASK: Implement the Jacobian you derived 
     *
@@ -130,7 +136,7 @@ function calc_jacobian(data,p) {
     //J[i][1]=??;
     //J[i][0]=??;
   }
-  
+
   return J;
 }
 
@@ -140,16 +146,16 @@ function calc_jacobian(data,p) {
 //initial_p: contains initial guess for parameter values
 //max_iterations: number of iterations to perform before stopping
 //return final parameter array p, where p[0]=d,...,p[3]=a
-function calc_nonlinLSQ_gaussnewton(data,initial_p,max_iterations) {
-  let N=numeric.dim(data)[0];
-  let x=squeeze_to_vector(numeric.getBlock(data,[0, 0],[N-1, 0])); //Extract x (dependent) values
-  let y=squeeze_to_vector(numeric.getBlock(data,[0, 1],[N-1, 1])); //Extract y (target) values
+function calc_nonlinLSQ_gaussnewton(data, initial_p, max_iterations) {
+  let N = numeric.dim(data)[0];
+  let x = squeeze_to_vector(numeric.getBlock(data, [0, 0], [N - 1, 0])); //Extract x (dependent) values
+  let y = squeeze_to_vector(numeric.getBlock(data, [0, 1], [N - 1, 1])); //Extract y (target) values
 
-  let p=initial_p.slice(0); //Make a copy, just to be safe
-  let dy=numeric.rep([N],0);
-  for(let iter=0;iter<=max_iterations;++iter) {
+  let p = initial_p.slice(0); //Make a copy, just to be safe
+  let dy = numeric.rep([N], 0);
+  for (let iter = 0; iter <= max_iterations; ++iter) {
     //Step 1: Find error for current guess
-    for(let i=0;i<N;++i) {
+    for (let i = 0; i < N; ++i) {
       /***********************
       * TASK: Calculate the error for each data point (actual error, NOT linearized!)
       *
@@ -160,19 +166,19 @@ function calc_nonlinLSQ_gaussnewton(data,initial_p,max_iterations) {
       */
       //dy[i]=??;
     }
-    
-    let sse=0;
+
+    let sse = 0;
     /***********************
     * TASK: Calculate SSE for each iteration
     *
     * Hint: Reuse/modify your code from previous problems.
     * Hint 2: Consider, perhaps you have already calculated part of what SSE needs?
     */
-    helper_log_write("Iteration "+iter+": SSE="+sse);
-    if(iter==max_iterations) break; //Only calculate SSE at end
+    helper_log_write("Iteration " + iter + ": SSE=" + sse);
+    if (iter == max_iterations) break; //Only calculate SSE at end
 
     //Step 2: Find the Jacobian around the current guess
-    let J=calc_jacobian(data,p);
+    let J = calc_jacobian(data, p);
 
     //Step 3: Calculate change in guess
     /***********************
@@ -184,7 +190,7 @@ function calc_nonlinLSQ_gaussnewton(data,initial_p,max_iterations) {
     *   can alter/reuse some of your previous code?
     */
     //let dp=??;
-    
+
     //Step 4: Make new guess
     /***********************
     * TASK: Apply the change in guess you calculated
@@ -203,25 +209,25 @@ function calc_nonlinLSQ_gaussnewton(data,initial_p,max_iterations) {
 //max_iterations: number of iterations to perform before stopping
 //learning_rate: the learning rate (alpha) value to use
 //return parameter array p, where p[0]=d,...,p[3]=a
-function calc_nonlinLSQ_gradientdescent(data,initial_p,max_iterations,learning_rate) {
-  let N=numeric.dim(data)[0];
-  let x=squeeze_to_vector(numeric.getBlock(data,[0, 0],[N-1, 0])); //Extract x (dependent) values
-  let y=squeeze_to_vector(numeric.getBlock(data,[0, 1],[N-1, 1])); //Extract y (target) values
+function calc_nonlinLSQ_gradientdescent(data, initial_p, max_iterations, learning_rate) {
+  let N = numeric.dim(data)[0];
+  let x = squeeze_to_vector(numeric.getBlock(data, [0, 0], [N - 1, 0])); //Extract x (dependent) values
+  let y = squeeze_to_vector(numeric.getBlock(data, [0, 1], [N - 1, 1])); //Extract y (target) values
 
-  let p=initial_p.slice(0);
-  let dy=numeric.rep([N],0);
-  for(let iter=0;iter<=max_iterations;++iter) {
+  let p = initial_p.slice(0);
+  let dy = numeric.rep([N], 0);
+  for (let iter = 0; iter <= max_iterations; ++iter) {
     //Note: You may find putting some code here, instead of with "Step 1", will make it
     //easier to calculate SSE. This is perfectly fine.
-    
-    let sse=0;
+
+    let sse = 0;
     /***********************
     * TASK: Calculate SSE for each iteration
     *
     * Hint: Reuse/modify your code from previous problems
     */
-    helper_log_write("Iteration "+iter+": SSE="+sse);
-    if(iter==max_iterations) break; //Only calculate SSE at end
+    helper_log_write("Iteration " + iter + ": SSE=" + sse);
+    if (iter == max_iterations) break; //Only calculate SSE at end
 
     //Step 1: Compute gradient
     /***********************
