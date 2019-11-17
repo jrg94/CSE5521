@@ -155,11 +155,13 @@ function calc_jacobian(data, p) {
     *
     * Hint: You should use the built-in Math.pow() and Math.log() functions for this
     */
-    //J[i][3]=??;
-    //J[i][2]=??;
-    //J[i][1]=??;
-    //J[i][0]=??;
+    J[i][3] = Math.pow(x[i], p[2]); // df(x, p) / da = x ^ b
+    J[i][2] = p[3] * Math.pow(x[i], p[2]) * Math.log(x[i]);  // df(x, p) / db = a * x^b * log(x)
+    J[i][1] = x[i]; // df(x, p) / dc = x
+    J[i][0] = 1; // 1
   }
+
+  console.log(J)
 
   return J;
 }
