@@ -126,12 +126,14 @@ function calc_jacobian(data, p) {
   return J;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
-//Peform Gauss-Newton non-linear least squares on polynomial a*x^b+c*x+d
-//initial_p: contains initial guess for parameter values
-//max_iterations: number of iterations to perform before stopping
-//return final parameter array p, where p[0]=d,...,p[3]=a
+/**
+ * Perform Gauss-Newton non-linear least squares on polynomial a*x^b+c*x+d
+ * 
+ * @param {Array} data list of data points
+ * @param {Array} initial_p list of initial parameters
+ * @param {Number} max_iterations number of iterations to perform before stopping
+ * @returns final parameter array p, where p[0]=d,...,p[3]=a
+ */
 function calc_nonlinLSQ_gaussnewton(data, initial_p, max_iterations) {
   let N = numeric.dim(data)[0];
   let x = squeeze_to_vector(numeric.getBlock(data, [0, 0], [N - 1, 0])); //Extract x (dependent) values
@@ -142,24 +144,10 @@ function calc_nonlinLSQ_gaussnewton(data, initial_p, max_iterations) {
   for (let iter = 0; iter <= max_iterations; ++iter) {
     //Step 1: Find error for current guess
     for (let i = 0; i < N; ++i) {
-      /***********************
-      * TASK: Calculate the error for each data point (actual error, NOT linearized!)
-      *
-      * Refer to slide 10
-      *
-      * Hint: You may use the provided function eval_nonlin_func(x,p) to evaluate
-      *   our non-linear function
-      */
       dy[i] = y[i] - eval_nonlin_func(x[i], p);
     }
 
     let sse = 0;
-    /***********************
-    * TASK: Calculate SSE for each iteration
-    *
-    * Hint: Reuse/modify your code from previous problems.
-    * Hint 2: Consider, perhaps you have already calculated part of what SSE needs?
-    */
     for (let i = 0; i < N; ++i) {
       sse += Math.pow(dy[i], 2)
     }
@@ -170,22 +158,9 @@ function calc_nonlinLSQ_gaussnewton(data, initial_p, max_iterations) {
     let J = calc_jacobian(data, p);
 
     //Step 3: Calculate change in guess
-    /***********************
-    * TASK: Calculate change in guess
-    * 
-    * Again, slide 10
-    *
-    * Hint: Remember how similar this step was to linear least squares, perhaps you
-    *   can alter/reuse some of your previous code?
-    */
     let dp = solveForParams(J, dy);
 
     //Step 4: Make new guess
-    /***********************
-    * TASK: Apply the change in guess you calculated
-    *
-    * Slide 10, of course
-    */
     p = numeric.add(p, dp);
   }
   return p;
