@@ -21,6 +21,22 @@
 
 //////////////////////////////////////////////////////////////////////////////
 
+/**
+ * Solves for p given A and b.
+ * 
+ * @param {Array} A the A matrix 
+ * @param {Array} b the b matrix
+ * @returns p
+ */
+function solveForParams(A, b) {
+  let ATranspose = numeric.transpose(A)
+  let AProduct = numeric.dot(ATranspose, A)
+  let AProductInverse = numeric.inv(AProduct)
+  let AProductInverseTranspose = numeric.dot(AProductInverse, ATranspose)
+  let p = numeric.dot(AProductInverseTranspose, b)
+  return p
+}
+
 //Perform linear least squares for line equation: y=a*x+b
 //return parameter array p, where p[0]=b and p[1]=a
 function calc_linLSQ_line(data) {
@@ -52,16 +68,7 @@ function calc_linLSQ_line(data) {
   *
   * Refer to slides 18-19
   ***********************/
-  // 5x2 -> 2x5
-  let ATranspose = numeric.transpose(A)
-  // 2x5 * 5x2 -> 2x2
-  let AProduct = numeric.dot(ATranspose, A)
-  // 2x2 -> 2x2
-  let AProductInverse = numeric.inv(AProduct)
-  // 2x2 * 2x5 -> 2x5
-  let AProductInverseTranspose = numeric.dot(AProductInverse, ATranspose)
-  // 2x5 * 5x1 -> 2x1
-  let p = numeric.dot(AProductInverseTranspose, b)
+  let p = solveForParams(A, b)
 
   let sse = 0;
   for (let i = 0; i < N; ++i) {
@@ -100,12 +107,14 @@ function calc_linLSQ_poly(data, order) {
     * Hint: In the case where order==1, this should give the same result
     *   as your calc_linLSQ_line() function
     ***********************/
-    //A[i][0]=??;
-    //A[i][1]=??;
-    //...
-    //A[i][order]=??;
-    //b[i]=??;
+    for (let j = 0; j <= order; j++) {
+      A[i][j] = Math.pow(x[i], j)
+    }
+
+    b[i] = [y[i]];
   }
+
+  let p = solveForParams(A, b)
 
   /***********************
   * TASK: Solve for parameters and calculate SSE
