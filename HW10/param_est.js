@@ -150,7 +150,7 @@ function calc_nonlinLSQ_gaussnewton(data, initial_p, max_iterations) {
       * Hint: You may use the provided function eval_nonlin_func(x,p) to evaluate
       *   our non-linear function
       */
-      dy[i] = dy[i] - eval_nonlin_func(x[i], p);
+      dy[i] = y[i] - eval_nonlin_func(x[i], p);
     }
 
     let sse = 0;
