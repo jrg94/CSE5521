@@ -37,47 +37,31 @@ function solveForParams(A, b) {
   return p
 }
 
-//Perform linear least squares for line equation: y=a*x+b
-//return parameter array p, where p[0]=b and p[1]=a
+/**
+ * Perform linear least squares for line equation: y=a*x+b
+ * 
+ * @param {Array} data 
+ * @returns parameter array p, where p[0]=b and p[1]=a
+ */
 function calc_linLSQ_line(data) {
-  let N = numeric.dim(data)[0]; //Number of data points
-  let x = squeeze_to_vector(numeric.getBlock(data, [0, 0], [N - 1, 0])); //Extract x (dependent) values
-  let y = squeeze_to_vector(numeric.getBlock(data, [0, 1], [N - 1, 1])); //Extract y (target) values
-  //Note: x and y are both vectors, use them accordingly.
-  //(For this homework x is a vector, but generally speaking it may not be!)
+  let N = numeric.dim(data)[0]; // Number of data points
+  let x = squeeze_to_vector(numeric.getBlock(data, [0, 0], [N - 1, 0])); // Extract x (dependent) values
+  let y = squeeze_to_vector(numeric.getBlock(data, [0, 1], [N - 1, 1])); // Extract y (target) values
 
-  //Setup matrices/vectors for calculation
-  let A = numeric.rep([N, 2], 0); //Make an empty (all zero) Nx2 matrix
-  let b = numeric.rep([N], 0); //Make an empty N element vector
+  // Setup matrices/vectors for calculation
+  let A = numeric.rep([N, 2], 0); // Make an empty (all zero) Nx2 matrix
+  let b = numeric.rep([N], 0); // Make an empty N element vector
   for (let i = 0; i < N; ++i) {
-    /***********************
-    * TASK: Fill in A and b
-    *
-    * Refer to slide 11 (and 10)
-    *
-    * Hint: BE CAREFUL of the order, what do the columns of A refer and relate to?
-    ***********************/
-
     A[i][0] = 1;
     A[i][1] = x[i];
     b[i] = [y[i]];
   }
 
-  /***********************
-  * TASK: Solve for parameters
-  *
-  * Refer to slides 18-19
-  ***********************/
   let p = solveForParams(A, b)
 
   let sse = 0;
   for (let i = 0; i < N; ++i) {
-    let model_out = eval_line_func(x[i], p); //The output of the model function on data point i using
-    //parameters p
-
-    /***********************
-    * TASK: Calculate the sum of squared error
-    ***********************/
+    let model_out = eval_line_func(x[i], p); // The output of the model function on data point i using parameters p
     sse += Math.pow((model_out - b[i][0]), 2)
   }
   helper_log_write("SSE=" + sse);
