@@ -83,14 +83,6 @@ function calc_linLSQ_poly(data, order) {
   let A = numeric.rep([N, order + 1], 0);
   let b = numeric.rep([N], 0);
   for (let i = 0; i < N; ++i) {
-		/***********************
-    * TASK: Fill in A and b
-    *
-    * Refer to your previous code, as well as slide 22
-    *
-    * Hint: In the case where order==1, this should give the same result
-    *   as your calc_linLSQ_line() function
-    ***********************/
     for (let j = 0; j <= order; j++) {
       A[i][j] = Math.pow(x[i], j)
     }
@@ -100,20 +92,9 @@ function calc_linLSQ_poly(data, order) {
 
   let p = solveForParams(A, b)
 
-  /***********************
-  * TASK: Solve for parameters and calculate SSE
-  *
-  * Re-use the code from your calc_linLSQ_line(), this part should be identical
-  *  EXCEPT use instead the provided eval_poly_func(x,p) instead of eval_line_func
-  */
   let sse = 0;
   for (let i = 0; i < N; ++i) {
-    let model_out = eval_poly_func(x[i], p); //The output of the model function on data point i using
-    //parameters p
-
-    /***********************
-    * TASK: Calculate the sum of squared error
-    ***********************/
+    let model_out = eval_poly_func(x[i], p); //The output of the model function on data point i using parameters p
     sse += Math.pow((model_out - b[i][0]), 2)
   }
   helper_log_write("SSE=" + sse);
