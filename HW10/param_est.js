@@ -122,6 +122,17 @@ function calc_linLSQ_poly(data, order) {
   * Re-use the code from your calc_linLSQ_line(), this part should be identical
   *  EXCEPT use instead the provided eval_poly_func(x,p) instead of eval_line_func
   */
+  let sse = 0;
+  for (let i = 0; i < N; ++i) {
+    let model_out = eval_poly_func(x[i], p); //The output of the model function on data point i using
+    //parameters p
+
+    /***********************
+    * TASK: Calculate the sum of squared error
+    ***********************/
+    sse += Math.pow((model_out - b[i][0]), 2)
+  }
+  helper_log_write("SSE=" + sse);
 
   return p;
 }
