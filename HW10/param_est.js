@@ -161,8 +161,6 @@ function calc_jacobian(data, p) {
     J[i][0] = 1; // 1
   }
 
-  console.log(J)
-
   return J;
 }
 
@@ -190,7 +188,7 @@ function calc_nonlinLSQ_gaussnewton(data, initial_p, max_iterations) {
       * Hint: You may use the provided function eval_nonlin_func(x,p) to evaluate
       *   our non-linear function
       */
-      //dy[i]=??;
+      dy[i] = dy[i] - eval_nonlin_func(x[i], p);
     }
 
     let sse = 0;
@@ -200,6 +198,9 @@ function calc_nonlinLSQ_gaussnewton(data, initial_p, max_iterations) {
     * Hint: Reuse/modify your code from previous problems.
     * Hint 2: Consider, perhaps you have already calculated part of what SSE needs?
     */
+    for (let i = 0; i < N; ++i) {
+      sse += Math.pow(dy[i], 2)
+    }
     helper_log_write("Iteration " + iter + ": SSE=" + sse);
     if (iter == max_iterations) break; //Only calculate SSE at end
 
@@ -215,7 +216,7 @@ function calc_nonlinLSQ_gaussnewton(data, initial_p, max_iterations) {
     * Hint: Remember how similar this step was to linear least squares, perhaps you
     *   can alter/reuse some of your previous code?
     */
-    //let dp=??;
+    let dp = solveForParams(J, dy);
 
     //Step 4: Make new guess
     /***********************
@@ -223,7 +224,7 @@ function calc_nonlinLSQ_gaussnewton(data, initial_p, max_iterations) {
     *
     * Slide 10, of course
     */
-    //p=??;
+    p = numeric.add(p, dp);
   }
   return p;
 }
