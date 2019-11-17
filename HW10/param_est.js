@@ -181,35 +181,25 @@ function calc_nonlinLSQ_gradientdescent(data, initial_p, max_iterations, learnin
   let p = initial_p.slice(0);
   let dy = numeric.rep([N], 0);
   for (let iter = 0; iter <= max_iterations; ++iter) {
-    //Note: You may find putting some code here, instead of with "Step 1", will make it
-    //easier to calculate SSE. This is perfectly fine.
+    // Compute dy
+    for (let i = 0; i < N; ++i) {
+      dy[i] = y[i] - eval_nonlin_func(x[i], p);
+    }
 
+    // Compute sse
     let sse = 0;
-    /***********************
-    * TASK: Calculate SSE for each iteration
-    *
-    * Hint: Reuse/modify your code from previous problems
-    */
-    helper_log_write("Iteration " + iter + ": SSE=" + sse);
+    for (let i = 0; i < N; ++i) {
+      sse += Math.pow(dy[i], 2)
+    }
+    helper_log_write("Iteration " + iter + ": SSE=" + sse)
     if (iter == max_iterations) break; //Only calculate SSE at end
 
-    //Step 1: Compute gradient
-    /***********************
-    * TASK: Compute gradient
-    *
-    * See slide 24.
-    *
-    * Hint: You should be able to reuse some code here!
-    */
-    //let grad=??;
+    // Step 1: Compute gradient
+    let J = calc_jacobian(data, p);
+    let grad = numeric.dot(numeric.mul(numeric.transpose(J), -2), dy) // -2 Jt(p) dy(p)
 
-    //Step 2: Update parameters
-    /***********************
-    * TASK: Update parameters
-    *
-    * See slide 23.
-    */
-    //p=??;
+    // Step 2: Update parameters
+    p = numeric.add(p, numeric.mul(grad, -learning_rate))
   }
   return p;
 }
