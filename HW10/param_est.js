@@ -71,6 +71,7 @@ function calc_linLSQ_line(data) {
     /***********************
     * TASK: Calculate the sum of squared error
     ***********************/
+    sse += Math.pow((model_out - b[i][0]), 2)
   }
   helper_log_write("SSE=" + sse);
 
