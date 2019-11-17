@@ -166,13 +166,15 @@ function calc_nonlinLSQ_gaussnewton(data, initial_p, max_iterations) {
   return p;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
-//Peform Gradient Descent non-linear least squares on polynomial a*x^b+c*x+d
-//initial_p: contains initial guess for parameter values
-//max_iterations: number of iterations to perform before stopping
-//learning_rate: the learning rate (alpha) value to use
-//return parameter array p, where p[0]=d,...,p[3]=a
+/**
+ * Perform Gradient Descent non-linear least squares on polynomial a*x^b+c*x+d
+ * 
+ * @param {Array} data a list of data points
+ * @param {Array} initial_p contains initial guess for parameter values
+ * @param {Number} max_iterations number of iterations to perform before stopping
+ * @param {Number} learning_rate the learning rate (alpha) value to use
+ * @returns parameter array p, where p[0]=d,...,p[3]=a
+ */
 function calc_nonlinLSQ_gradientdescent(data, initial_p, max_iterations, learning_rate) {
   let N = numeric.dim(data)[0];
   let x = squeeze_to_vector(numeric.getBlock(data, [0, 0], [N - 1, 0])); //Extract x (dependent) values
@@ -192,7 +194,7 @@ function calc_nonlinLSQ_gradientdescent(data, initial_p, max_iterations, learnin
       sse += Math.pow(dy[i], 2)
     }
     helper_log_write("Iteration " + iter + ": SSE=" + sse)
-    if (iter == max_iterations) break; //Only calculate SSE at end
+    if (iter == max_iterations) break; // Only calculate SSE at end
 
     // Step 1: Compute gradient
     let J = calc_jacobian(data, p);
