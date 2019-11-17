@@ -104,24 +104,19 @@ function calc_linLSQ_poly(data, order) {
   return p;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
-//Calculate jacobian matrix for a*x^b+c*x+d
-//p: parameter array where p[0]=d,...,p[3]=a
-//return Jacobian matrix
+/**
+ * Calculate jacobian matrix for a*x^b+c*x+d
+ * 
+ * @param {Array} data list of data points
+ * @param {Array} p list of parameters, where p[0]=d,...,p[3]=a
+ * @returns Jacobian matrix
+ */
 function calc_jacobian(data, p) {
   let N = numeric.dim(data)[0];
-  let x = squeeze_to_vector(numeric.getBlock(data, [0, 0], [N - 1, 0])); //Extract x (dependent) values
+  let x = squeeze_to_vector(numeric.getBlock(data, [0, 0], [N - 1, 0])); // Extract x (dependent) values
 
   let J = numeric.rep([N, 4], 0);
   for (let i = 0; i < N; ++i) {
-    /***********************
-    * TASK: Implement the Jacobian you derived 
-    *
-    * Make sure columns of J follow same ordering as p
-    *
-    * Hint: You should use the built-in Math.pow() and Math.log() functions for this
-    */
     J[i][3] = Math.pow(x[i], p[2]); // df(x, p) / da = x ^ b
     J[i][2] = p[3] * Math.pow(x[i], p[2]) * Math.log(x[i]);  // df(x, p) / db = a * x^b * log(x)
     J[i][1] = x[i]; // df(x, p) / dc = x
