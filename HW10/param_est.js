@@ -40,7 +40,7 @@ function solveForParams(A, b) {
 /**
  * Perform linear least squares for line equation: y=a*x+b
  * 
- * @param {Array} data 
+ * @param {Array} data a list of data points
  * @returns parameter array p, where p[0]=b and p[1]=a
  */
 function calc_linLSQ_line(data) {
@@ -69,16 +69,18 @@ function calc_linLSQ_line(data) {
   return p;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
-//Perform linear least squares for polynomial
-//order: order of the polynomial
-//return parameter array p, where p[0] is the constant term and p[order] holds the highest order coefficient
-//(example: for quadratic a*x^2+b*x+c, order=2, p[0]=c, p[1]=b, p[2]=a)
+/**
+ * Perform linear least squares for polynomial
+ * (example: for quadratic a*x^2+b*x+c, order=2, p[0]=c, p[1]=b, p[2]=a)
+ * 
+ * @param {Array} data list of data points
+ * @param {Number} order the order of the polynomial
+ * @returns parameter array p, where p[0] is the constant term and p[order] holds the highest order coefficient
+ */
 function calc_linLSQ_poly(data, order) {
   let N = numeric.dim(data)[0];
-  let x = squeeze_to_vector(numeric.getBlock(data, [0, 0], [N - 1, 0])); //Extract x (dependent) values
-  let y = squeeze_to_vector(numeric.getBlock(data, [0, 1], [N - 1, 1])); //Extract y (target) values
+  let x = squeeze_to_vector(numeric.getBlock(data, [0, 0], [N - 1, 0])); // Extract x (dependent) values
+  let y = squeeze_to_vector(numeric.getBlock(data, [0, 1], [N - 1, 1])); // Extract y (target) values
 
   let A = numeric.rep([N, order + 1], 0);
   let b = numeric.rep([N], 0);
@@ -94,7 +96,7 @@ function calc_linLSQ_poly(data, order) {
 
   let sse = 0;
   for (let i = 0; i < N; ++i) {
-    let model_out = eval_poly_func(x[i], p); //The output of the model function on data point i using parameters p
+    let model_out = eval_poly_func(x[i], p); // The output of the model function on data point i using parameters p
     sse += Math.pow((model_out - b[i][0]), 2)
   }
   helper_log_write("SSE=" + sse);
